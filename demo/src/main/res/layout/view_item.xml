@@ -2,7 +2,7 @@
 <com.ataulm.rv.demo.ItemView xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/dummy_item_parent"
   android:layout_width="match_parent"
-  android:layout_height="150dp"
+  android:layout_height="wrap_content"
   android:gravity="center"
   android:focusable="true"
   android:clickable="true"

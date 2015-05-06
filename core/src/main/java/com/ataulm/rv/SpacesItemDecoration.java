@@ -5,7 +5,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-public final class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
     private final int itemSplitMarginEven;
     private final int itemSplitMarginLarge;
@@ -13,8 +13,7 @@ public final class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
     private final int verticalSpacing;
 
-    public static SpacesItemDecoration newInstance(int horizontalSpacing, int verticalSpacing, SpanSizeLookup spanSizeLookup) {
-        int spanCount = spanSizeLookup.getSpanCount();
+    public static SpacesItemDecoration newInstance(int horizontalSpacing, int verticalSpacing, int spanCount) {
         int maxNumberOfSpaces = spanCount - 1;
         int totalSpaceToSplitBetweenItems = maxNumberOfSpaces * horizontalSpacing;
 
@@ -38,17 +37,17 @@ public final class SpacesItemDecoration extends RecyclerView.ItemDecoration {
         int itemPosition = layoutParams.getViewPosition();
         int childCount = parent.getAdapter().getItemCount();
 
-        if (layoutParams instanceof GridLayoutManager.LayoutParams) {
-            GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
-            int spanCount = layoutManager.getSpanCount();
+        SpanLookup spanLookup = getSpanLookup(view, parent);
+        applyItemHorizontalOffsets(spanLookup, itemPosition, outRect);
+        applyItemVerticalOffsets(outRect, itemPosition, childCount, spanLookup.getSpanCount(), spanLookup);
+    }
 
-            SpanLookup spanLookup = new SpanLookup(layoutManager.getSpanSizeLookup(), spanCount);
-            applyItemHorizontalOffsets(spanLookup, itemPosition, outRect);
-            applyItemVerticalOffsets(outRect, itemPosition, childCount, spanCount, spanLookup);
-        } else {
-            // TODO
-            throw new IllegalStateException("support more things");
+    protected SpanLookup getSpanLookup(View view, RecyclerView parent) {
+        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+        if (layoutManager instanceof GridLayoutManager) {
+            return SpanLookupFactory.gridLayoutSpanLookup((GridLayoutManager) layoutManager);
         }
+        return SpanLookupFactory.singleSpan();
     }
 
     private void applyItemVerticalOffsets(Rect outRect, int itemPosition, int childCount, int spanCount, SpanLookup spanLookup) {
@@ -146,30 +145,6 @@ public final class SpacesItemDecoration extends RecyclerView.ItemDecoration {
             }
         }
         return itemPosition >= latestCheckedPosition;
-    }
-
-    private static class SpanLookup {
-
-        private final GridLayoutManager.SpanSizeLookup spanSizeLookup;
-        private final int spanCount;
-
-        SpanLookup(GridLayoutManager.SpanSizeLookup spanSizeLookup, int spanCount) {
-            this.spanSizeLookup = spanSizeLookup;
-            this.spanCount = spanCount;
-        }
-
-        int getSpanCount() {
-            return spanCount;
-        }
-
-        int getSpanIndex(int itemPosition) {
-            return spanSizeLookup.getSpanIndex(itemPosition, getSpanCount());
-        }
-
-        int getSpanSize(int itemPosition) {
-            return spanSizeLookup.getSpanSize(itemPosition);
-        }
-
     }
 
 }
