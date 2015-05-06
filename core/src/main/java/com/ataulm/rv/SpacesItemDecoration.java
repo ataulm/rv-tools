@@ -7,24 +7,28 @@ import android.view.View;
 
 public final class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
-    private final int horizontalSpacing;
-    private final int horizontalSpacingMajorPart;
-    private final int horizontalSpacingMinorPart;
+    private final int itemSplitMarginEven;
+    private final int itemSplitMarginLarge;
+    private final int itemSplitMarginSmall;
+
     private final int verticalSpacing;
 
     public static SpacesItemDecoration newInstance(int horizontalSpacing, int verticalSpacing, SpanSizeLookup spanSizeLookup) {
-        int maxSpansInRow = spanSizeLookup.getSpanCount();
-        int numberOfGaps = maxSpansInRow - 1;
-        int horizontalSpacingMajorPart = (int) (1f * numberOfGaps * horizontalSpacing / maxSpansInRow);
-        int horizontalSpacingMinorPart = horizontalSpacing - horizontalSpacingMajorPart;
+        int spanCount = spanSizeLookup.getSpanCount();
+        int maxNumberOfSpaces = spanCount - 1;
+        int totalSpaceToSplitBetweenItems = maxNumberOfSpaces * horizontalSpacing;
 
-        return new SpacesItemDecoration(horizontalSpacing, horizontalSpacingMajorPart, horizontalSpacingMinorPart, verticalSpacing);
+        int itemSplitMarginEven = (int) (0.5f * horizontalSpacing);
+        int itemSplitMarginLarge = totalSpaceToSplitBetweenItems / spanCount;
+        int itemSplitMarginSmall = horizontalSpacing - itemSplitMarginLarge;
+
+        return new SpacesItemDecoration(itemSplitMarginEven, itemSplitMarginLarge, itemSplitMarginSmall, verticalSpacing);
     }
 
-    private SpacesItemDecoration(int horizontalSpacing, int horizontalSpacingMajorPart, int horizontalSpacingMinorPart, int verticalSpacing) {
-        this.horizontalSpacing = horizontalSpacing;
-        this.horizontalSpacingMajorPart = horizontalSpacingMajorPart;
-        this.horizontalSpacingMinorPart = horizontalSpacingMinorPart;
+    private SpacesItemDecoration(int itemSplitMarginEven, int itemSplitMarginLarge, int itemSplitMarginSmall, int verticalSpacing) {
+        this.itemSplitMarginEven = itemSplitMarginEven;
+        this.itemSplitMarginLarge = itemSplitMarginLarge;
+        this.itemSplitMarginSmall = itemSplitMarginSmall;
         this.verticalSpacing = verticalSpacing;
     }
 
@@ -57,26 +61,26 @@ public final class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
         if (itemStartsAtTheLeftEdge(spanLookup, itemPosition)) {
             offsets.left = 0;
-            offsets.right = horizontalSpacingMajorPart;
+            offsets.right = itemSplitMarginLarge;
             return;
         }
 
         if (itemEndsAtTheRightEdge(spanLookup, itemPosition)) {
-            offsets.left = horizontalSpacingMajorPart;
+            offsets.left = itemSplitMarginLarge;
             offsets.right = 0;
             return;
         }
 
         if (itemIsNextToAnItemThatStartsOnTheLeftEdge(spanLookup, itemPosition)) {
-            offsets.left = horizontalSpacingMinorPart;
+            offsets.left = itemSplitMarginSmall;
         } else {
-            offsets.left = (int) (.5f * horizontalSpacing);
+            offsets.left = itemSplitMarginEven;
         }
 
         if (itemIsNextToAnItemThatEndsOnTheRightEdge(spanLookup, itemPosition)) {
-            offsets.right = horizontalSpacingMinorPart;
+            offsets.right = itemSplitMarginSmall;
         } else {
-            offsets.right = (int) (.5f * horizontalSpacing);
+            offsets.right = itemSplitMarginEven;
         }
     }
 
