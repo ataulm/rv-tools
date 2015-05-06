@@ -14,14 +14,20 @@ import com.ataulm.rv.SpacesItemDecoration;
 public class DemoActivity extends Activity {
 
     private static final int DUMMY_ITEM_COUNT = 25;
-    private static final int SPAN_COUNT = 4;
+    private static final int SPAN_COUNT = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo);
         RecyclerView listview = (RecyclerView) findViewById(R.id.list);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, SPAN_COUNT);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, SPAN_COUNT);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position % 3 == 0 ? SPAN_COUNT : 1;
+            }
+        });
         listview.setLayoutManager(layoutManager);
 
         int spacing = getResources().getDimensionPixelSize(R.dimen.spacing);

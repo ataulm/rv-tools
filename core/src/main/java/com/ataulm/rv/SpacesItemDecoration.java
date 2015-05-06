@@ -128,8 +128,8 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
         int latestCheckedPosition = 0;
         for (int i = 0; i < childCount; i++) {
             latestCheckedPosition = i;
-            int spanIndex = spanLookup.getSpanIndex(i);
-            if (spanIndex == spanCount - 1) {
+            int spanEndIndex = spanLookup.getSpanIndex(i) + spanLookup.getSpanSize(i) - 1;
+            if (spanEndIndex == spanCount - 1) {
                 break;
             }
         }
