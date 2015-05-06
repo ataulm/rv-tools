@@ -5,6 +5,15 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+/**
+ * Adds spaces (between) between Item views.
+ *
+ * Supports GridLayoutManager and LinearLayoutManager. Extend this class and override the
+ * {@link #getSpanLookup(android.view.View, android.support.v7.widget.RecyclerView)} method to support other
+ * LayoutManagers.
+ *
+ * Currently only supports LayoutManagers in VERTICAL orientation.
+ */
 public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
     private final int itemSplitMarginEven;

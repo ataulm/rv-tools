@@ -1,7 +1,6 @@
 package com.ataulm.rv;
 
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 
 class SpanLookupFactory {
 
