@@ -44,12 +44,16 @@ public final class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
             SpanLookup spanLookup = new SpanLookup(layoutManager.getSpanSizeLookup(), spanCount);
             applyItemHorizontalOffsets(spanLookup, itemPosition, outRect);
-            outRect.top = getItemTopSpacing(spanLookup, verticalSpacing, itemPosition, spanCount, childCount);
-            outRect.bottom = getItemBottomSpacing(spanLookup, verticalSpacing, itemPosition, childCount);
+            applyItemVerticalOffsets(outRect, itemPosition, childCount, spanCount, spanLookup);
         } else {
             // TODO
             throw new IllegalStateException("support more things");
         }
+    }
+
+    private void applyItemVerticalOffsets(Rect outRect, int itemPosition, int childCount, int spanCount, SpanLookup spanLookup) {
+        outRect.top = getItemTopSpacing(spanLookup, verticalSpacing, itemPosition, spanCount, childCount);
+        outRect.bottom = getItemBottomSpacing(spanLookup, verticalSpacing, itemPosition, childCount);
     }
 
     private void applyItemHorizontalOffsets(SpanLookup spanLookup, int itemPosition, Rect offsets) {
