@@ -1,5 +1,6 @@
 ext {
     androidSupportVersion = '23.4.0'
+    androidBuildToolsVersion = '23.0.3'
 }
 
 task wrapper(type: Wrapper) {
